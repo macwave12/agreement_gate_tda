@@ -1,7 +1,7 @@
 
 # Agreement-Gated TDA
 
-Code for "Agreement-Gated TDA: the cache that echoes CLIP, and a fix that adds no parameters" (`paper.pdf`), built
+Code for "Agreement-Gated TDA: the cache that echoes CLIP, and a fix that adds no parameters" (`summary.pdf`), built
 on the VLM-TTA benchmark below. TDA's positive cache is filled with CLIP's own predictions, so on many samples it
 votes for the class CLIP already chose: such a vote cannot change the decision and only adds confidence. The
 agreement gate uses the positive cache only where its top class differs from CLIP's.
@@ -41,10 +41,10 @@ the cached features; DMN-weak and ECALP (Table 2) run on the GPU if there is one
 temperature baseline of Table 2 is fitted on the val streams of the design sets that are included.
 
 Features extracted on another GPU or software version differ in their last bits, which moves the numbers
-slightly: `paper.pdf` was built from features extracted on an RTX 5060 with the versions in `requirements.txt`.
+slightly: `summary.pdf` was built from features extracted on an RTX 5060 with the versions in `requirements.txt`.
 ECALP is the one method that is sensitive to this beyond the second decimal.
 
-On that setup `results/` reproduces every figure and table of `paper.pdf`. Nine table cells differ by 0.01 in the
+On that setup `results/` reproduces every figure and table of `summary.pdf`. Nine table cells differ by 0.01 in the
 last digit, because the paper's tables were printed from values stored at three or four decimals and `tables.md`
 rounds once from full precision: the std of TDA's accuracy on Aircraft (Table 1); TDA's accuracy on Caltech101,
 TDA's ECE on GTSRB and SVHN, CLIP's ECE on MNIST and its far-tier mean (Table 3); the gate on Aircraft,
