@@ -1,0 +1,13 @@
+# Tested with Python 3.14 and the versions below. Install torch and torchvision for your CUDA version first
+# (https://pytorch.org/get-started/locally/); the paper's runs used the cu128 build on an RTX 5060.
+torch==2.11.0
+torchvision==0.26.0
+numpy==2.5.2
+pandas==3.0.5
+scipy==1.18.0
+matplotlib==3.11.1
+pillow==12.3.0
+ftfy==6.3.1
+regex==2026.7.19
+tqdm==4.70.0
+setuptools<81  # clip/clip.py imports pkg_resources

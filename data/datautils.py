@@ -23,17 +23,26 @@ ID_to_DIRNAME={
     'K': 'imagenet-sketch/images',
     'R': 'imagenet-rendition/imagenet-r',
     'V': 'imagenetv2/imagenetv2-matched-frequency-format-val',
-    'flower102': 'few-shot-datasets/oxford_flowers',
-    'dtd': 'few-shot-datasets/dtd',
-    'pets': 'few-shot-datasets/oxford_pets',
+    'flower102': 'oxford_flowers',
+    'dtd': 'dtd',
+    'pets': 'oxford_pets',
     'cars': 'few-shot-datasets/stanford_cars',
     'ucf101': 'few-shot-datasets/ucf101',
-    'caltech101': 'few-shot-datasets/caltech-101',
-    'food101': 'few-shot-datasets/food-101',
+    'caltech101': 'caltech-101',
+    'food101': 'food-101',
     'sun397': 'few-shot-datasets/sun397',
-    'aircraft': 'few-shot-datasets/fgvc_aircraft',
-    'eurosat': 'few-shot-datasets/eurosat'
+    'aircraft': 'fgvc_aircraft',
+    'eurosat': 'eurosat',
+    # held-out sets from the CLIP_benchmark webdataset mirrors, unpacked into class folders 0000..N
+    'StanfordCarsWDS': 'stanford-cars-wds/images',
+    'GTSRB': 'gtsrb/images',
+    'FER2013': 'fer2013/images',
+    'PCAM': 'pcam/images',
+    'SVHN': 'svhn/images',
+    'MNIST': 'mnist/images',
+    'RenderedSST2': 'rendered_sst2/images',
 }
+WDS_SET_IDS = ('StanfordCarsWDS', 'GTSRB', 'FER2013', 'PCAM', 'SVHN', 'MNIST', 'RenderedSST2')
 
 class ImageFolder_path(datasets.ImageFolder):
     def __init__(
@@ -70,9 +79,13 @@ def build_dataset(set_id, transform, data_root, mode='test', n_shot=None, split=
         # ImageNet validation set
         testdir = os.path.join(os.path.join(data_root, ID_to_DIRNAME[set_id]), 'val')
         testset = datasets.ImageFolder(testdir, transform=transform)
-    elif set_id in ['A', 'K', 'R', 'V']:
+    elif set_id in ['A', 'K', 'R', 'V'] or set_id in WDS_SET_IDS:
         testdir = os.path.join(data_root, ID_to_DIRNAME[set_id])
         testset = datasets.ImageFolder(testdir, transform=transform)
+        if set_id in WDS_SET_IDS:
+            # the folder names are the class indices; ImageFolder would renumber them by position
+            testset.samples = [(path, int(testset.classes[t])) for path, t in testset.samples]
+            testset.imgs, testset.targets = testset.samples, [t for _, t in testset.samples]
     elif set_id in fewshot_datasets:
         if mode == 'train' and n_shot:
             testset = build_fewshot_dataset(set_id, os.path.join(data_root, ID_to_DIRNAME[set_id.lower()]), transform, mode=mode, n_shot=n_shot)

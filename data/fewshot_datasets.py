@@ -145,6 +145,7 @@ def build_fewshot_dataset(set_id, root, transform, mode='train', n_shot=None):
         return Aircraft(root, mode, n_shot, transform)
     path_suffix, json_path = path_dict[set_id.lower()]
     image_path = os.path.join(root, path_suffix)
+    json_path = os.path.join(root, os.path.basename(json_path))  # the split file sits in the dataset folder
     return BaseJsonDataset(image_path, json_path, mode, n_shot, transform)
 
 def build_fewshot_dataset_adv(set_id, root, transform, mode='train', n_shot=None, replace_path=''):
